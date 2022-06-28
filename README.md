@@ -34,4 +34,4 @@ python train.py --config_path ./CTE_Net/CTE-Net.yaml
 bash evaluation.sh
 ```
 The path of `training_dir` in **evaluation.sh** need to be set before evaluation, so the code knows which model needs to be evaluated.
-All the metrics will be save in `training_dir`.
+All the metrics will be save in the corresponding folder of `training_dir`.
