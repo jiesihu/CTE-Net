@@ -13,7 +13,6 @@ Specifically, we design a channel tuning strategy and fine-grain texture enhanci
 - torchvision>=0.11.1
 - monai>=0.8.1
 - pillow
-- scipy
 - yaml
 - json
 
@@ -21,8 +20,9 @@ Specifically, we design a channel tuning strategy and fine-grain texture enhanci
 ```shell
 pip install -r requirements.txt
 ```
+
 ### Dataset
-The COVID-19 Challenge is a public dataset. See [here](./sample_data).
+The COVID-19 Challenge is a public dataset. See [here](https://covid-segmentation.grand-challenge.org).
 
 ### Training and Evaluation
 
