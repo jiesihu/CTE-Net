@@ -1,4 +1,4 @@
-# Rectal Cancer LNM Classification
+# CTE-Net
 ## Introduction
 We design an efficient classification strategy for paper, **CTE-Net: Automatic COVID-19 Lung Infection Segmentation Boosted by Low-level Features and Fine-grained Textures**. 
 Specifically, we design a channel tuning strategy and fine-grain texture enhancing unit to improve COVID-19 infection segmentation.
@@ -33,5 +33,5 @@ python train.py --config_path ./CTE_Net/CTE-Net.yaml
 ```
 bash evaluation.sh
 ```
-The value of `training_dir` need to be set before evaluation, so the code knows which model needs to be evaluated.
-
+The path of `training_dir` in **evaluation.sh** need to be set before evaluation, so the code knows which model needs to be evaluated.
+All the metrics will be save in `training_dir`.
