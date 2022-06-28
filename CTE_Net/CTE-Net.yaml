@@ -1,0 +1,97 @@
+CLASS_NAMES: ['background', 'infection'] 
+
+
+MODE: train # train or test
+
+DATA_CONFIG:
+    use_sample: True
+    Sampled:
+        image_path_train: /data/jiesi/COVID19/nnUnet/nnUNet_raw_data_base/nnUNet_raw_data/Task075_COVID19Challenge/data2D/train_sample
+        seg_path_train: /data/jiesi/COVID19/nnUnet/nnUNet_raw_data_base/nnUNet_raw_data/Task075_COVID19Challenge/data2D/train_GT_sample
+        
+    image_path_val: /data/jiesi/COVID19/nnUnet/nnUNet_raw_data_base/nnUNet_raw_data/Task075_COVID19Challenge/data2D/val
+    seg_path_val: /data/jiesi/COVID19/nnUnet/nnUNet_raw_data_base/nnUNet_raw_data/Task075_COVID19Challenge/data2D/val_GT
+    
+    image_path_test: /data/jiesi/COVID19/nnUnet/nnUNet_raw_data_base/nnUNet_raw_data/Task075_COVID19Challenge/data2D/test
+    seg_path_test: /data/jiesi/COVID19/nnUnet/nnUNet_raw_data_base/nnUNet_raw_data/Task075_COVID19Challenge/data2D/test_GT
+
+    Weight:
+        background: 0.02
+        infection: 1.98
+        
+DATA_PREPROCESS:
+    window_size: 400
+    batch_size: 12
+    Train:
+        Img_trans: 
+            Compose([
+            LoadImage(image_only=True),
+            AddChannel(),
+            ScaleIntensity(),
+            RandSpatialCrop((window_size, window_size), random_size=False),
+            RandRotate90(prob=0.5, spatial_axes=(0, 1)),
+            RandAxisFlip(prob = 0.2),
+            RandAffine(scale_range = 0.5 ,rotate_range = np.pi/6,prob = 0.25,padding_mode = 'zeros',mode = "bilinear"),
+            Rand2DElastic(prob=0.2,spacing=(30, 30),magnitude_range=(1, 2),padding_mode="zeros",), 
+            RandGaussianNoise(std = 0.01,prob = 0.2),
+            RandShiftIntensity(offsets = 0.1, prob = 0.2),
+            EnsureType(),])
+        Seg_trans:
+            Compose([
+            LoadImage(image_only=True),
+            AddChannel(),
+            ScaleIntensity(),
+            RandSpatialCrop((window_size, window_size), random_size=False),
+            RandRotate90(prob=0.5, spatial_axes=(0, 1)),
+            RandAxisFlip(prob = 0.2),
+            RandAffine(scale_range = 0.5, rotate_range = np.pi/6,prob = 0.25,padding_mode = 'zeros',mode = "nearest"),
+            Rand2DElastic(prob=0.2,spacing=(30, 30),magnitude_range=(1, 2),padding_mode="zeros",mode = "nearest"),
+            EnsureType(),])
+    
+    Val: 
+        Img_trans: Compose([LoadImage(image_only=True), AddChannel(), ScaleIntensity(), EnsureType()])
+        Seg_trans: Compose([LoadImage(image_only=True), AddChannel(), ScaleIntensity(), EnsureType()])
+        
+    post_trans: Compose([EnsureType(),AsDiscrete(argmax=True)])
+    
+OPTIMIZATION:
+    cuda_idx: 2
+    
+    continue_training: False
+    continue_path: ./runs/Apr21_11-56-19_hitlab-SYS-7048GR-TR/ 
+    
+    BATCH_SIZE: 12
+    NUM_EPOCHS: 400
+    VAL_INTERVAL: 6
+    
+    include_background: True
+
+    OPTIMIZER: torch.optim.Adam(model.parameters(), lr)
+    LR: 0.0001
+    WEIGHT_DECAY: 0
+    SCHEDULER: ReduceLROnPlateau(optimizer, mode='max', factor=0.2, patience=20,verbose = True)
+
+    GRAD_NORM_CLIP: 10
+    
+    loss: monai.losses.DiceCELoss(to_onehot_y=True, softmax=True,ce_weight = torch.tensor([1.,1.]).to(device))
+    
+
+    
+
+MODEL:
+    NAME: CTE_Net
+    NETWORK: 
+        net.CTE_Net( 
+        spatial_dims=2, 
+        in_channels=1, 
+        out_channels=2, 
+        channels=(248, 248, 112, 112, 112), 
+        strides=(2, 2, 2, 2), 
+        num_res_units=2, 
+        dropout = 0.1)
+        
+NOTES: CTE-Net # critical change
+
+
+
+
