@@ -29,6 +29,7 @@ The path of dataset need to be set in **./CTE_Net/CTE-Net.yaml** before training
 ```
 python train.py --config_path ./CTE_Net/CTE-Net.yaml
 ```
+
 ### Evaluation
 ```
 bash evaluation.sh
