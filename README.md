@@ -22,7 +22,7 @@ pip install -r requirements.txt
 ```
 
 ### Dataset
-The COVID-19 Challenge is a public dataset. See [here](https://covid-segmentation.grand-challenge.org).
+The COVID-19 Challenge dataset can be found [here](https://covid-segmentation.grand-challenge.org).
 
 ### Training and Evaluation
 The path of dataset need to be set in **./CTE_Net/CTE-Net.yaml** before training.
