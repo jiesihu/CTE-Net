@@ -25,9 +25,9 @@ pip install -r requirements.txt
 The COVID-19 Challenge is a public dataset. See [here](https://covid-segmentation.grand-challenge.org).
 
 ### Training and Evaluation
-
+The path of dataset need to be set in *./CTE_Net/CTE-Net.yaml* before training.
 ```
-python Med3D_train.py
+python train.py --config_path ./CTE_Net/CTE-Net.yaml
 ```
 
 
